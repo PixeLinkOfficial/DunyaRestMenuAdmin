@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/DunyaRestMenuAdmin/static/css/main.1eb4a153.css",
+    "main.js": "/DunyaRestMenuAdmin/static/js/main.4b5b988a.js",
+    "static/media/restimg.png": "/DunyaRestMenuAdmin/static/media/restimg.76f9702990200b1ad601.png",
+    "index.html": "/DunyaRestMenuAdmin/index.html",
+    "main.1eb4a153.css.map": "/DunyaRestMenuAdmin/static/css/main.1eb4a153.css.map",
+    "main.4b5b988a.js.map": "/DunyaRestMenuAdmin/static/js/main.4b5b988a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1eb4a153.css",
+    "static/js/main.4b5b988a.js"
+  ]
+}
