@@ -7,6 +7,7 @@ import "../index.css";
 export default function ItemForm({ categoryId, item, onClose, onSaved }) {
   const [nameEn, setNameEn] = useState(item?.nameEn || "");
   const [nameAr, setNameAr] = useState(item?.nameAr || "");
+  const [nameKr, setNameKr] = useState(item?.nameKr || ""); // ✅ NEW Kurdish state
   const [price, setPrice] = useState(
     item ? item.price.replace(" IQD", "").replace(/,/g, "") : ""
   );
@@ -29,11 +30,19 @@ export default function ItemForm({ categoryId, item, onClose, onSaved }) {
     const itemData = {
       nameEn,
       nameAr,
+      nameKr, // ✅ include Kurdish name
       price: formattedPrice,
       image: imageUrl,
     };
 
-    if (isEdit) { await updateDoc(doc(db, "categories", categoryId, "items", item.id), itemData); } else { await addDoc(collection(db, "categories", categoryId, "items"), { ...itemData, createdAt: Date.now() }); }
+    if (isEdit) {
+      await updateDoc(doc(db, "categories", categoryId, "items", item.id), itemData);
+    } else {
+      await addDoc(collection(db, "categories", categoryId, "items"), {
+        ...itemData,
+        createdAt: Date.now(),
+      });
+    }
 
     onSaved();
   };
@@ -54,7 +63,7 @@ export default function ItemForm({ categoryId, item, onClose, onSaved }) {
               padding: "8px",
               marginBottom: "12px",
               border: "1px solid #ccc",
-              borderRadius: "4px"
+              borderRadius: "4px",
             }}
           />
 
@@ -70,7 +79,23 @@ export default function ItemForm({ categoryId, item, onClose, onSaved }) {
               padding: "8px",
               marginBottom: "12px",
               border: "1px solid #ccc",
-              borderRadius: "4px"
+              borderRadius: "4px",
+            }}
+          />
+
+          <label style={{ display: "block", marginBottom: "6px", fontWeight: "600" }}>
+            Name (Kurdish)
+          </label>
+          <input
+            value={nameKr}
+            onChange={(e) => setNameKr(e.target.value)}
+            dir="rtl" // ✅ Kurdish also RTL
+            style={{
+              width: "100%",
+              padding: "8px",
+              marginBottom: "12px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
             }}
           />
 
@@ -86,7 +111,7 @@ export default function ItemForm({ categoryId, item, onClose, onSaved }) {
               padding: "8px",
               marginBottom: "12px",
               border: "1px solid #ccc",
-              borderRadius: "4px"
+              borderRadius: "4px",
             }}
           />
 
@@ -110,7 +135,7 @@ export default function ItemForm({ categoryId, item, onClose, onSaved }) {
                 border: "none",
                 borderRadius: "4px",
                 cursor: "pointer",
-                marginRight: "10px"
+                marginRight: "10px",
               }}
             >
               Save
@@ -124,7 +149,7 @@ export default function ItemForm({ categoryId, item, onClose, onSaved }) {
                 padding: "8px 16px",
                 border: "none",
                 borderRadius: "4px",
-                cursor: "pointer"
+                cursor: "pointer",
               }}
             >
               Cancel

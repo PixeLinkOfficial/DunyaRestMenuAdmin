@@ -22,7 +22,6 @@ body {
   height: 70px;
   
 }
-
 .lang {
   border: none;
   padding: 8px 16px;
@@ -38,7 +37,7 @@ body {
 }
 .lang-switch {
   position: relative;
-  width: 140px;
+  width: 210px;
   height: 44px;
   background: #dbe7fb;
   border-radius: 999px;
@@ -46,19 +45,25 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 4px;
-  cursor: pointer;
   user-select: none;
+  overflow: hidden;
 }
 
 .lang-option {
   z-index: 2;
-  width: 50%;
+  width: calc(100% / 3);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   font-weight: 600;
   font-size: 14px;
+  color: #233042;
+  transition: color 0.2s ease;
+}
+
+.lang-option.active {
+  color: white; /* active text color */
 }
 
 .lang-option img {
@@ -71,23 +76,17 @@ body {
   position: absolute;
   top: 4px;
   left: 4px;
-  width: calc(50% - 4px);
+  width: calc((100% / 3) - 4px);
   height: calc(100% - 8px);
   background: #3b6cb7;
   border-radius: 999px;
   transition: transform 0.25s ease;
+  z-index: 1;
+  pointer-events: none;
 }
 
-/* When Arabic is active */
-.lang-switch.ar .lang-thumb {
-  transform: translateX(100%);
-}
-
-/* Active text color */
-.lang-switch.en .lang-option:first-child,
-.lang-switch.ar .lang-option:last-child {
-  color: white;
-}
+/* Thumb positions for EN (1st), AR (2nd), KR (3rd) */
+.lang-switch.en .lang-thumb { transform: translateX(calc(100% * 0)); } .lang-switch.ar .lang-thumb { transform: translateX(calc(100% * 1)); } .lang-switch.kr .lang-thumb { transform: translateX(calc(100% * 0)); }
 
 
 .tabs {

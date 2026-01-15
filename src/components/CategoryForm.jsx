@@ -5,17 +5,19 @@ import { db } from "../firebase";
 export default function CategoryForm({ onClose, onSaved }) {
   const [titleEn, setTitleEn] = useState("");
   const [titleAr, setTitleAr] = useState("");
+  const [titleKr, setTitleKr] = useState(""); // ✅ NEW Kurdish state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!titleEn.trim() || !titleAr.trim()) {
-      return alert("Both languages required");
+    if (!titleEn.trim() || !titleAr.trim() || !titleKr.trim()) {
+      return alert("All three languages required");
     }
 
     await addDoc(collection(db, "categories"), {
       titleEn,
       titleAr,
-      createdAt: Date.now() // ✅ ensure categories have createdAt
+      titleKr, // ✅ save Kurdish title
+      createdAt: Date.now() // ensure categories have createdAt
     });
 
     onSaved();
@@ -36,6 +38,12 @@ export default function CategoryForm({ onClose, onSaved }) {
             value={titleAr}
             onChange={(e) => setTitleAr(e.target.value)}
             dir="rtl"
+          />
+          <label>Title (Kurdish)</label>
+          <input
+            value={titleKr}
+            onChange={(e) => setTitleKr(e.target.value)}
+            dir="rtl" // ✅ Kurdish also RTL
           />
           <div className="modal-actions">
             <button type="submit">Save</button>

@@ -89,145 +89,167 @@ useEffect(() => {
   };
 
   return (
-    <div className={`app ${lang}`} dir={lang === "ar" ? "rtl" : "ltr"}>
-      {/* Header + Lang Switch */}
-      <div className="header">
+  <div className={`app ${lang}`} dir={lang === "ar" || lang === "kr" ? "rtl" : "ltr"}>
+    {/* Header + Lang Switch */}
+    <div className="header">
+      <div className={`lang-switch ${lang}`}>
         <div
-          className={`lang-switch ${lang}`}
-          onClick={() => setLang(lang === "en" ? "ar" : "en")}
+          className={`lang-option ${lang === "en" ? "active" : ""}`}
+          onClick={() => setLang("en")}
         >
-          <div className="lang-option">
-            <img src="https://flagcdn.com/gb.svg" alt="English" />
-            <span>EN</span>
-          </div>
-          <div className="lang-option">
-            <img src="https://flagcdn.com/sa.svg" alt="Arabic" />
-            <span>AR</span>
-          </div>
-          <div className="lang-thumb" />
+          <img src="https://flagcdn.com/gb.svg" alt="English" />
+          <span>EN</span>
         </div>
+        <div
+          className={`lang-option ${lang === "ar" ? "active" : ""}`}
+          onClick={() => setLang("ar")}
+        >
+          <img src="https://flagcdn.com/sa.svg" alt="Arabic" />
+          <span>AR</span>
+        </div>
+        <div
+          className={`lang-option ${lang === "kr" ? "active" : ""}`}
+          onClick={() => setLang("kr")}
+        >
+          <img src="https://flagcdn.com/iq.svg" alt="Kurdish" />
+          <span>KR</span>
+        </div>
+        <div className="lang-thumb" />
+      </div>
+    </div>
+
+    <div className="content">
+      {/* Hero Image */}
+      <div className="hero-image">
+        <img src={restImg} alt="Restaurant" />
       </div>
 
-      <div className="content">
-        {/* Hero Image */}
-        <div className="hero-image">
-          <img src={restImg} alt="Restaurant" />
-        </div>
-
-        {/* Tabs from Firebase */}
-        <div className="tabs">
-          {categories.map((cat) => (
-            <div
-                key={cat.id}
-                style={{ display: "inline-flex", alignItems: "center", marginRight: "6px",whiteSpace: "nowrap" }}
-              >
-                <button
-                  onClick={() => setCategory(cat.id)}
-                  style={{
-                    backgroundColor: category === cat.id ? "#3b6cb7" : "#ffffff",
-                    color: category === cat.id ? "#fff" : "#333",
-                    padding: "8px 16px",
-                    border: "none",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {lang === "en" ? cat.titleEn : cat.titleAr}
-                </button>
-
-                {isAdmin && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteCategory(cat.id);
-                    }}
-                    style={{
-                      backgroundColor: "#F44336",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "4px",
-                      padding: "8px 8px",
-                      marginLeft: lang === "en" ? "0px" : "0",
-                      marginRight: lang === "en" ? "0" : "0px",
-                      cursor: "pointer"
-                    }}
-                  >
-                    X
-                  </button>
-                )}
-              </div>
-
-          ))}
-          {isAdmin && (
+      {/* Tabs from Firebase */}
+      <div className="tabs">
+        {categories.map((cat) => (
+          <div
+            key={cat.id}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              marginRight: "6px",
+              whiteSpace: "nowrap",
+            }}
+          >
             <button
-              onClick={() => setShowCatForm(true)}
+              onClick={() => setCategory(cat.id)}
               style={{
-                backgroundColor: "#4CAF50",
-                color: "#fff",
+                backgroundColor: category === cat.id ? "#3b6cb7" : "#ffffff",
+                color: category === cat.id ? "#fff" : "#333",
                 padding: "8px 16px",
                 border: "none",
                 borderRadius: "4px",
                 cursor: "pointer",
-                marginLeft: "10px",
-                fontWeight: "bold"
+                fontWeight: "bold",
               }}
             >
-              + Add category
+              {lang === "en"
+                ? cat.titleEn
+                : lang === "ar"
+                ? cat.titleAr
+                : cat.titleKr}
             </button>
-          )}
-        </div>
 
-        {showCatForm && (
-          <CategoryForm
-            onClose={() => setShowCatForm(false)}
-            onSaved={async () => {
-              setShowCatForm(false);
-              await fetchCategories();
-            }}
-          />
-        )}
-
-        {/* Active category title */}
-        {category && (
-          <p
+            {isAdmin && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteCategory(cat.id);
+                }}
+                style={{
+                  backgroundColor: "#F44336",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "4px",
+                  padding: "8px 8px",
+                  cursor: "pointer",
+                }}
+              >
+                X
+              </button>
+            )}
+          </div>
+        ))}
+        {isAdmin && (
+          <button
+            onClick={() => setShowCatForm(true)}
             style={{
-              fontSize: "20px",
-              fontWeight: "600",
-              marginTop: "20px",
-              color: "#333"
+              backgroundColor: "#4CAF50",
+              color: "#fff",
+              padding: "8px 16px",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              marginLeft: "10px",
+              fontWeight: "bold",
             }}
           >
-            {lang === "en"
-              ? categories.find((c) => c.id === category)?.titleEn
-              : categories.find((c) => c.id === category)?.titleAr}
-          </p>
+            + Add category
+          </button>
         )}
+      </div>
 
-        {/* Items from Firebase */}
-        <div className="list">
-          {items.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => setSelectedItem(item)}
-              style={{
-                border: "1px solid #ddd",
-                borderRadius: "6px",
-                padding: "12px",
-                marginBottom: "12px",
-                cursor: "pointer",
-                backgroundColor: "#fff",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center"
-              }}
-            >
-              <div>
-                <p style={{ fontWeight: "600", marginBottom: "4px" }}>
-                  {lang === "en" ? item.nameEn : item.nameAr}
-                </p>
-                <p style={{ color: "#555" }}>{item.price}</p>
-                {isAdmin && (
+      {showCatForm && (
+        <CategoryForm
+          onClose={() => setShowCatForm(false)}
+          onSaved={async () => {
+            setShowCatForm(false);
+            await fetchCategories();
+          }}
+        />
+      )}
+
+      {/* Active category title */}
+      {category && (
+        <p
+          style={{
+            fontSize: "20px",
+            fontWeight: "600",
+            marginTop: "20px",
+            color: "#333",
+          }}
+        >
+          {lang === "en"
+            ? categories.find((c) => c.id === category)?.titleEn
+            : lang === "ar"
+            ? categories.find((c) => c.id === category)?.titleAr
+            : categories.find((c) => c.id === category)?.titleKr}
+        </p>
+      )}
+
+      {/* Items from Firebase */}
+      <div className="list">
+        {items.map((item) => (
+          <div
+            key={item.id}
+            onClick={() => setSelectedItem(item)}
+            style={{
+              border: "1px solid #ddd",
+              borderRadius: "6px",
+              padding: "12px",
+              marginBottom: "12px",
+              cursor: "pointer",
+              backgroundColor: "#fff",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <p style={{ fontWeight: "600", marginBottom: "4px" }}>
+                {lang === "en"
+                  ? item.nameEn
+                  : lang === "ar"
+                  ? item.nameAr
+                  : item.nameKr}
+              </p>
+              <p style={{ color: "#555" }}>{item.price}</p>
+              {isAdmin && (
                 <div
                   onClick={(e) => e.stopPropagation()}
                   style={{ marginTop: "10px" }}
@@ -241,7 +263,7 @@ useEffect(() => {
                       border: "none",
                       borderRadius: "4px",
                       cursor: "pointer",
-                      marginRight: "6px"
+                      marginRight: "6px",
                     }}
                   >
                     Edit
@@ -254,136 +276,136 @@ useEffect(() => {
                       padding: "6px 12px",
                       border: "none",
                       borderRadius: "4px",
-                      cursor: "pointer"
+                      cursor: "pointer",
                     }}
                   >
                     Delete
                   </button>
-                  
                 </div>
-                
               )}
-              </div>
-             
-              
-               {item.image && <CardImage src={item.image} alt={item.nameEn} />}
             </div>
-            
-          ))}
 
-          {isAdmin && (
-            <div>
-              <button
-                onClick={() => setAddingItem(true)}
-                style={{
-                  backgroundColor: "#3b6cb7",
-                  color: "#fff",
-                  padding: "8px 16px",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                  marginTop: "10px",
-                  fontWeight: "bold"
-                }}
-              >
-                + Add item
-              </button>
-            </div>
-          )}
+            {item.image && <CardImage src={item.image} alt={item.nameEn} />}
+          </div>
+        ))}
 
-          {addingItem && (
-            <ItemForm
-              categoryId={category}
-              onClose={() => setAddingItem(false)}
-              onSaved={async () => {
-                setAddingItem(false);
-                await fetchItems();
-              }}
-            />
-          )}
-          {editingItem && (
-            <ItemForm
-              categoryId={category}
-              item={editingItem}
-              onClose={() => setEditingItem(null)}
-              onSaved={async () => {
-                setEditingItem(null);
-                await fetchItems();
-              }}
-            />
-          )}
-        </div>
-      </div>
-
-      {/* Popup (view only) */}
-      {selectedItem && (
-        <div
-          onClick={() => setSelectedItem(null)}
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-                        zIndex: 1000
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              backgroundColor: "#fff",
-              borderRadius: "8px",
-              maxWidth: "500px",
-              width: "90%",
-              padding: "20px",
-              position: "relative",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.3)"
-            }}
-          >
+        {isAdmin && (
+          <div>
             <button
-              onClick={() => setSelectedItem(null)}
+              onClick={() => setAddingItem(true)}
               style={{
-                position: "absolute",
-                top: "10px",
-                right: "10px",
-                backgroundColor: "#F44336",
+                backgroundColor: "#3b6cb7",
                 color: "#fff",
+                padding: "8px 16px",
                 border: "none",
-                borderRadius: "50%",
-                width: "32px",
-                height: "32px",
+                borderRadius: "4px",
                 cursor: "pointer",
-                fontSize: "16px",
-                fontWeight: "bold"
+                marginTop: "10px",
+                fontWeight: "bold",
               }}
             >
-              ✕
+              + Add item
             </button>
-            <div style={{ textAlign: "center", marginBottom: "16px" }}>
-              <img
-                src={selectedItem.image}
-                alt={selectedItem.nameEn}
-                style={{
-                  maxWidth: "100%",
-                  borderRadius: "6px"
-                }}
-              />
-            </div>
-            <div style={{ textAlign: "center" }}>
-              <h2 style={{ marginBottom: "8px", color: "#333" }}>
-                {lang === "en" ? selectedItem.nameEn : selectedItem.nameAr}
-              </h2>
-              <p style={{ fontSize: "18px", fontWeight: "600", color: "#555" }}>
-                {selectedItem.price}
-              </p>
-            </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {addingItem && (
+          <ItemForm
+            categoryId={category}
+            onClose={() => setAddingItem(false)}
+            onSaved={async () => {
+              setAddingItem(false);
+              await fetchItems();
+            }}
+          />
+        )}
+        {editingItem && (
+          <ItemForm
+            categoryId={category}
+            item={editingItem}
+            onClose={() => setEditingItem(null)}
+            onSaved={async () => {
+              setEditingItem(null);
+              await fetchItems();
+            }}
+          />
+        )}
+      </div>
     </div>
-  );
+
+   {/* Popup (view only) */}
+{selectedItem && (
+  <div
+    onClick={() => setSelectedItem(null)}
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      backgroundColor: "rgba(0,0,0,0.5)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 1000,
+    }}
+  >
+    <div
+      onClick={(e) => e.stopPropagation()}
+      style={{
+        backgroundColor: "#fff",
+        borderRadius: "8px",
+        maxWidth: "500px",
+        width: "90%",
+        padding: "20px",
+        position: "relative",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+      }}
+    >
+      <button
+        onClick={() => setSelectedItem(null)}
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          backgroundColor: "#F44336",
+          color: "#fff",
+          border: "none",
+          borderRadius: "50%",
+          width: "32px",
+          height: "32px",
+          cursor: "pointer",
+          fontSize: "16px",
+          fontWeight: "bold",
+        }}
+      >
+        ✕
+      </button>
+      <div style={{ textAlign: "center", marginBottom: "16px" }}>
+        <img
+          src={selectedItem.image}
+          alt={selectedItem.nameEn}
+          style={{
+            maxWidth: "100%",
+            borderRadius: "6px",
+          }}
+        />
+      </div>
+      <div style={{ textAlign: "center" }}>
+        <h2 style={{ marginBottom: "8px", color: "#333" }}>
+          {lang === "en"
+            ? selectedItem.nameEn
+            : lang === "ar"
+            ? selectedItem.nameAr
+            : selectedItem.nameKr}
+        </h2>
+        <p style={{ fontSize: "18px", fontWeight: "600", color: "#555" }}>
+          {selectedItem.price}
+        </p>
+      </div>
+    </div>
+  </div>
+)}
+</div>
+);
 }
