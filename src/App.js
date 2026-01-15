@@ -14,6 +14,8 @@ import restImg from "./assets/others/restimg.png";
 import CardImage from "./components/CardImage";
 import CategoryForm from "./components/CategoryForm";
 import ItemForm from "./components/ItemForm";
+import ukflag from "./assets/uk.png";
+import krflag from "./assets/kr.png";
 
 
 export default function App({ lang, setLang, isAdmin = false }) {
@@ -97,7 +99,7 @@ useEffect(() => {
           className={`lang-option ${lang === "en" ? "active" : ""}`}
           onClick={() => setLang("en")}
         >
-          <img src="https://flagcdn.com/gb.svg" alt="English" />
+          <img src={ukflag} alt="English" style={{height:'18px',width:'18px'}}/>
           <span>EN</span>
         </div>
         <div
@@ -111,7 +113,7 @@ useEffect(() => {
           className={`lang-option ${lang === "kr" ? "active" : ""}`}
           onClick={() => setLang("kr")}
         >
-          <img src="https://flagcdn.com/iq.svg" alt="Kurdish" />
+          <img src={krflag} alt="Kurdish" style={{height:'25px',width:'25px'}}/>
           <span>KR</span>
         </div>
         <div className="lang-thumb" />
