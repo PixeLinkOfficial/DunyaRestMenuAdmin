@@ -252,6 +252,14 @@ body {
   margin-right: 6px ;
   text-align: right;
 }
+.app.kr .card .p1{
+  margin-right: 6px ;
+  text-align: right;
+}
+.app.kr .card p{
+  margin-right: 6px ;
+  text-align: right;
+}
 
 .landing {
   height: 100vh;
